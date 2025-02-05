@@ -4,7 +4,7 @@ set -e
 # 启动 FunASR 服务
 bash run_server.sh \
   # 关闭ssl
-  --certfile 0
+  --certfile 0 \
   # 指定下载模型的目录，确保所有模型都存储在此目录
   --download-model-dir /workspace/FunASR/models \  
   # 指定语音端点检测（VAD）模型的路径
