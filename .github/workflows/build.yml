@@ -37,6 +37,8 @@ jobs:
             linux/amd64
             linux/arm64
           push: true
+          build-args: |
+            FUNASR_VERSION=${{ github.event.inputs.version }}
           tags: |
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
             ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.event.inputs.version }}
