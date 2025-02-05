@@ -11,9 +11,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 配置 FunASR 服务
-COPY models /workspace/FunASR/models
-
 # 设置工作目录
 WORKDIR /workspace/FunASR/runtime
 
