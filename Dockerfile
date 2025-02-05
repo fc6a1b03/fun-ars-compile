@@ -1,3 +1,4 @@
+ARG FUNASR_VERSION
 # 使用 FunASR 官方基础镜像
 FROM registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:${FUNASR_VERSION}
 
