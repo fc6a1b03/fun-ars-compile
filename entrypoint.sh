@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e  # 遇到任何错误（非零退出状态）时立即退出脚本，避免错误累积
+set -e
 
 # 启动 FunASR 服务
 bash run_server.sh \
