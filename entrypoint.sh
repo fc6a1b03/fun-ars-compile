@@ -21,6 +21,6 @@ bash run_server.sh \
   --lm-dir /workspace/FunASR/models/speech_ngram_lm_zh-cn-ai-wesp-fst \  
   # 指定反标准化（ITN）模型的路径，用于将数字和缩写转换为文本形式
   # https://modelscope.cn/models/thuduj12/fst_itn_zh
-  --itn-dir /workspace/FunASR/models/FunASR/fst_itn_zh \
+  --itn-dir /workspace/FunASR/models/fst_itn_zh \
   # 指定热词文件的路径，用于提高特定词汇的识别准确率
   --hotword /workspace/FunASR/models/hotwords.txt
