@@ -9,7 +9,7 @@ on:
         default: '1.0.0'
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
