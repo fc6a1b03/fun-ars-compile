@@ -24,7 +24,7 @@ FROM python:3.9-alpine
 WORKDIR /app
 # 从builder阶段复制安装的依赖和模型
 COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
-COPY --from=builder /app/models /app/models
+# COPY --from=builder /app/models /app/models
 COPY --from=builder /app/sensevoice_offline_sdk.py /app/sensevoice_offline_sdk.py
 # 运行应用
 CMD ["python", "sensevoice_offline_sdk.py"]
