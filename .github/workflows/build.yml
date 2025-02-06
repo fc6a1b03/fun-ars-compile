@@ -2,10 +2,15 @@ name: SenseVoice Offline SDK CI
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of FUNASR to use'
+        required: true
+        default: '1.0.0'
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -14,33 +19,41 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
-      - name: Set up Docker Buildx 
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set registry environment variable 
-        run: echo "REGISTRY=ghcr.io" >> $GITHUB_ENV
-
-      - name: Log in to the Container registry
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
-        id: docker-login
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build 和 push 
+      - name: Log in to Tencent Cloud Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ccr.ccs.tencentyun.com
+          username: ${{ secrets.TENCENT_CLOUD_USERNAME }}
+          password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+
+      - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v6
         with:
-          context: . 
+          context: .
           platforms: |
             linux/amd64
             linux/arm64
           push: true
-          build-args: |
-            FUNASR_VERSION=${{ github.event.inputs.version }}
-          tags: | 
-            ${{ env.REGISTRY }}/${{ github.repository }}:latest
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
 
-      - name: Optimize Docker image size
-        run: |
-          docker images --all --format "{{.Repository}}:{{.Tag}}" | xargs -I {} docker image prune -f --filter label=stage={} || true
+      - name: Build and push to Tencent Cloud Container Registry
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: |
+            linux/amd64
+            linux/arm64
+          push: true
+          tags: |
+            ccr.ccs.tencentyun.com/aichat/sense-voice-compile:latest
