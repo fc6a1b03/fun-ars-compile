@@ -6,3 +6,4 @@ pydub
 torchaudio
 onnxruntime
 scipy
+gitpython
