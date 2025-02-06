@@ -1,0 +1,8 @@
+numpy
+transformers
+torch
+flask
+pydub
+torchaudio
+onnxruntime
+scipy
