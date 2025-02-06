@@ -28,7 +28,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push 
+      - name: Build 和 push 
         uses: docker/build-push-action@v6
         with:
           context: . 
@@ -40,7 +40,6 @@ jobs:
             FUNASR_VERSION=${{ github.event.inputs.version }}
           tags: | 
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
-            ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.event.inputs.version }}
 
       - name: Optimize Docker image size
         run: |
