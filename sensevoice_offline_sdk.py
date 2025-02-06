@@ -1,21 +1,22 @@
 import os
 import torch
 import torchaudio
-from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer, FastSpeech2Model, MBart50Tokenizer
-from flask import Flask, request, jsonify
+from transformers import AutoProcessor, AutoModelForCTC, MBart50Tokenizer, AutoModelForTextToSpeech
+from flask import Flask, request, jsonify, send_file
 from pydub import AudioSegment
 import io
 import scipy.io.wavfile as wavfile
+import numpy as np
 
 app = Flask(__name__)
 
 # 加载音频转文本模型
-asr_tokenizer = Wav2Vec2Tokenizer.from_pretrained("facebook/wav2vec2-base-960h")
-asr_model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
+asr_processor = AutoProcessor.from_pretrained("/app/models/asr")
+asr_model = AutoModelForCTC.from_pretrained("/app/models/asr")
 
 # 加载文本转语音模型
 tts_tokenizer = MBart50Tokenizer.from_pretrained("facebook/mbart-large-50-many-to-one-mmt")
-tts_model = FastSpeech2Model.from_pretrained("facebook/fastspeech2-en-ljspeech")
+tts_model = AutoModelForTextToSpeech.from_pretrained("/app/models/tts")
 
 @app.route('/audio_to_text', methods=['POST'])
 def audio_to_text():
@@ -30,10 +31,11 @@ def audio_to_text():
     audio_tensor = torch.tensor(audio_segment.get_array_of_samples()).float().unsqueeze(0) / 32768.0
     
     with torch.no_grad():
-        logits = asr_model(audio_tensor).logits
+        inputs = asr_processor(audio_tensor, sampling_rate=16_000, return_tensors="pt", padding=True)
+        logits = asr_model(**inputs).logits
     
     predicted_ids = torch.argmax(logits, dim=-1)
-    transcription = asr_tokenizer.batch_decode(predicted_ids)[0]
+    transcription = asr_processor.decode(predicted_ids[0])
     
     return jsonify({'transcription': transcription})
 
@@ -47,11 +49,10 @@ def text_to_speech():
     inputs = tts_tokenizer(text, return_tensors="pt")
     
     with torch.no_grad():
-        mel_outputs_before_postnet = tts_model(**inputs).mel_outputs_before_postnet
+        speech = tts_model.generate_speech(inputs["input_ids"], speaker_embeddings=torch.randn(1, 256))
     
-    sample_rate = 22050
-    waveform = torchaudio.transforms.GriffinLim()(mel_outputs_before_postnet.squeeze())
-    waveform = waveform.numpy()
+    sample_rate = 16000
+    waveform = speech.numpy()
     
     # Save the waveform to an in-memory buffer
     out_wav = io.BytesIO()
