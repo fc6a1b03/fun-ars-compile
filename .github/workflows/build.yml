@@ -24,14 +24,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Log in to Tencent Cloud Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ccr.ccs.tencentyun.com
-          username: ${{ secrets.TENCENT_CLOUD_USERNAME }}
-          password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+      # - name: Log in to Tencent Cloud Container Registry
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ccr.ccs.tencentyun.com
+      #     username: ${{ secrets.TENCENT_CLOUD_USERNAME }}
+      #     password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
 
-      - name: Build and push to GitHub Container Registry
+      - name: Build 和 push to GitHub Container Registry
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -42,13 +42,13 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:latest
 
-      - name: Build and push to Tencent Cloud Container Registry
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: |
-            linux/amd64
-            linux/arm64
-          push: true
-          tags: |
-            ccr.ccs.tencentyun.com/aichat/sense-voice-compile:latest
+      # - name: Build 和 push to Tencent Cloud Container Registry
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     platforms: |
+      #       linux/amd64
+      #       linux/arm64
+      #     push: true
+      #     tags: |
+      #       ccr.ccs.tencentyun.com/aichat/sense-voice-compile:latest
