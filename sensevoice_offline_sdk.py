@@ -10,13 +10,17 @@ import numpy as np
 
 app = Flask(__name__)
 
+# 获取模型路径，默认为/app/models
+ASR_MODEL_PATH = os.getenv('ASR_MODEL_PATH', '/app/models/asr')
+TTS_MODEL_PATH = os.getenv('TTS_MODEL_PATH', '/app/models/tts')
+
 # 加载音频转文本模型
-asr_processor = AutoProcessor.from_pretrained("/app/models/asr")
-asr_model = AutoModelForCTC.from_pretrained("/app/models/asr")
+asr_processor = AutoProcessor.from_pretrained(ASR_MODEL_PATH)
+asr_model = AutoModelForCTC.from_pretrained(ASR_MODEL_PATH)
 
 # 加载文本转语音模型
 tts_tokenizer = MBart50Tokenizer.from_pretrained("facebook/mbart-large-50-many-to-one-mmt")
-tts_model = AutoModelForTextToSpeech.from_pretrained("/app/models/tts")
+tts_model = AutoModelForTextToSpeech.from_pretrained(TTS_MODEL_PATH)
 
 @app.route('/audio_to_text', methods=['POST'])
 def audio_to_text():
