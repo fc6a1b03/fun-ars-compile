@@ -1,5 +1,4 @@
 FROM python:3.9-slim AS builder
-# 设置工作目录
 WORKDIR /app
 # 安装必要的依赖
 RUN apt-get update && \
@@ -19,8 +18,6 @@ COPY . .
 # =========================================================================================================
 
 FROM python:3.9-alpine
-
-# 设置工作目录
 WORKDIR /app
 # 从builder阶段复制安装的依赖和模型
 COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
