@@ -2,11 +2,6 @@ name: SenseVoice Offline SDK CI
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version of FUNASR to use'
-        required: true
-        default: '1.0.0'
 
 jobs:
   build-and-test:
