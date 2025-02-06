@@ -10,9 +10,9 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 # 克隆ModelScope上的ASR模型仓库: https://modelscope.cn/models/iic/speech_data2vec_pretrain-zh-cn-aishell2-16k-pytorch
-RUN git clone --depth 1 https://www.modelscope.cn/iic/speech_data2vec_pretrain-zh-cn-aishell2-16k-pytorch.git models/asr
+# RUN git clone --depth 1 https://www.modelscope.cn/iic/speech_data2vec_pretrain-zh-cn-aishell2-16k-pytorch.git models/asr
 # 克隆ModelScope上的TTS模型仓库: https://modelscope.cn/models/iic/speech_sambert-hifigan_tts_zh-cn_16k 
-RUN git clone --depth 1 https://www.modelscope.cn/iic/speech_sambert-hifigan_tts_zh-cn_16k.git models/tts
+# RUN git clone --depth 1 https://www.modelscope.cn/iic/speech_sambert-hifigan_tts_zh-cn_16k.git models/tts
 # 复制应用程序代码
 COPY . .
 
